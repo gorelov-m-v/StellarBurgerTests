@@ -37,5 +37,8 @@ public class Paths {
     public String getGET_ORDER_PATH() {
         return GET_ORDER_PATH;
     }
-
+    public final String RESET_PASSWORD = "/api/password-reset";
+    public String getRESET_PASSWORD() {
+        return RESET_PASSWORD;
+    }
 }

@@ -45,8 +45,12 @@ public class Messages {
     public String getUSER_SUCCESSFULLY_REMOVED() {
         return USER_SUCCESSFULLY_REMOVED;
     }
-    public String SUCCESSFUL_LOGOUT  = "Successful logout";
+    private String SUCCESSFUL_LOGOUT  = "Successful logout";
     public String getSUCCESSFUL_LOGOUT() {
         return SUCCESSFUL_LOGOUT;
+    }
+    private String RESET_EMAIL_SENT = "Reset email sent";
+    public String getRESET_EMAIL_SENT() {
+        return RESET_EMAIL_SENT;
     }
 }
