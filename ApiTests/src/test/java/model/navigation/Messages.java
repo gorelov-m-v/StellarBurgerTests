@@ -6,6 +6,10 @@ public class Messages {
         return USER_ALREADY_EXISTS;
     }
     private final String CREATING_USER_WITHOUT_FIELD = "Email, password and name are required fields";
+    private final String INVALID_PASSWORD_LENGTH = "Password length must be between 8 and 50 characters";
+    public String getINVALID_PASSWORD_LENGTH() {
+        return INVALID_PASSWORD_LENGTH;
+    }
     public String getCREATING_USER_WITHOUT_FIELD() {
         return CREATING_USER_WITHOUT_FIELD;
     }

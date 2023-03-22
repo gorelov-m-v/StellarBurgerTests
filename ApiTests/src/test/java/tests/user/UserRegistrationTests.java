@@ -19,33 +19,32 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class UserRegistrationTests extends TestListenerAdapter {
+public class UserRegistrationTests extends TestHelper {
     UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
     RegistrationResponse registrationResponse;
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
-    Generator generate = new Generator();
-    Urls urls = new Urls();
-    Messages messages = new Messages();
-
-
-    @DataProvider(name = "test1")
-    public static Object[][] passwordLength() {
-
-        return new Object[][] {{2, true, 200},
-                               {6, true, 200},
-                               {19, true, 200},
-                               {22, true, 200},
-                               {0, false, 403}};
-    }
-
 
     @BeforeMethod
-    public void BeforeMethod(ITestContext ctx, Method method){
+    public void BeforeMethod(){
         RestAssured.baseURI = urls.getStellarBurgerProd();
     }
 
-    @Test(dataProvider = "test1")
-    public void smokeUserRegistrationTest(int passwordLength, boolean success, int statusCode) {
+    @DataProvider(name = "passwordLength")
+    public static Object[][] passwordLength() {
+
+        return new Object[][] {{4,   false},
+                               {7,   false},
+                               {8,    true},
+                               {9,    true},
+                               {35,   true},
+                               {49,   true},
+                               {50,   true},
+                               {51,  false},
+                               {70,  false}};
+    }
+
+    @Test(dataProvider = "passwordLength")
+    public void passwordLengthValidationTest(int passwordLength, boolean success) {
 
         User requestedUser = new User().withEmail(generate.randomEmail())
                                        .withPassword(generate.randomPassword(passwordLength))
@@ -53,26 +52,45 @@ public class UserRegistrationTests extends TestListenerAdapter {
 
         registrationResponse = registrationRequest.userRegistration(requestedUser);
 
-        assertThat(registrationRequest.statusCode).isEqualTo(statusCode);
         assertThat(registrationResponse.success()).isEqualTo(success);
+        if(registrationResponse.success() == true) {
+            assertThat(registrationRequest.statusCode).isEqualTo(200);
+            assertThat(registrationResponse.user().email()).isEqualTo(requestedUser.email());
+            assertThat(registrationResponse.user().name()).isEqualTo(requestedUser.name());
+            assertThat(registrationResponse.accessToken()).isNotNull();
+            assertThat(registrationResponse.refreshToken()).isNotNull();
+        } else {
+            assertThat(registrationRequest.statusCode).isEqualTo(404);
+            assertThat(registrationResponse.getMessage()).isEqualTo(messages.getINVALID_PASSWORD_LENGTH());
+        }
     }
-
-    @Test
-    public void smokeUserRegistrationTes2t() {
-
-        User requestedUser = new User().withEmail(generate.randomEmail())
-                                       .withPassword(generate.randomPassword(8))
-                                       .withName(generate.randomName());
-
-        registrationResponse = registrationRequest.userRegistration(requestedUser);
-
-        assertThat(registrationRequest.statusCode).isEqualTo(200);
-        assertThat(registrationResponse.success()).isEqualTo(true);
-        assertThat(registrationResponse.user().email()).isEqualTo(requestedUser.email());
-        assertThat(registrationResponse.user().name()).isEqualTo(requestedUser.name());
-        assertThat(registrationResponse.accessToken()).isNotNull();
-        assertThat(registrationResponse.refreshToken()).isNotNull();
-    }
+//
+//    @DataProvider(name = "nameLength")
+//    public static Object[][] nameLength() {
+//
+//        return new Object[][] {{2,  false},
+//                               {4,  false},
+//                               {5,   true},
+//                               {6,   true},
+//                               {12,  true}};
+//    }
+//
+//    @Test(dataProvider = "nameLength")
+//    public void passwordLengthValidationTest() {
+//
+//        User requestedUser = new User().withEmail(generate.randomEmail())
+//                                       .withPassword(generate.randomPassword(8))
+//                                       .withName(generate.randomName());
+//
+//        registrationResponse = registrationRequest.userRegistration(requestedUser);
+//
+//        assertThat(registrationRequest.statusCode).isEqualTo(200);
+//        assertThat(registrationResponse.success()).isEqualTo(true);
+//        assertThat(registrationResponse.user().email()).isEqualTo(requestedUser.email());
+//        assertThat(registrationResponse.user().name()).isEqualTo(requestedUser.name());
+//        assertThat(registrationResponse.accessToken()).isNotNull();
+//        assertThat(registrationResponse.refreshToken()).isNotNull();
+//    }
 
     @AfterMethod
     public void tearDown(ITestResult result) {
