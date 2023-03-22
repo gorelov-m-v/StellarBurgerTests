@@ -28,7 +28,7 @@ public class UserChangeDataTests extends TestHelper {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         firstUserData = new User().withEmail(generate.randomEmail())
                                   .withPassword(generate.randomPassword(8))
-                                  .withName(generate.randomName());
+                                  .withName(generate.randomName(11));
 
         registrationResponse = registrationRequest.userRegistration(firstUserData);
     }
@@ -37,7 +37,7 @@ public class UserChangeDataTests extends TestHelper {
     public void smokeUserChangeDataTest() {
         secondUserData = new User().withEmail(generate.randomEmail())
                                    .withPassword(generate.randomPassword(8))
-                                   .withName(generate.randomName());
+                                   .withName(generate.randomName(11));
 
         changeDataResponse = changeDataRequest.changeUserData(secondUserData, registrationResponse.accessToken());
 

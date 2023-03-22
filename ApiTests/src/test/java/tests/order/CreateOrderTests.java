@@ -37,7 +37,7 @@ public class CreateOrderTests extends TestHelper {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         user = new User().withEmail(generate.randomEmail())
                          .withPassword(generate.randomPassword(8))
-                         .withName(generate.randomName());
+                         .withName(generate.randomName(11));
         registrationResponse = registrationRequest.userRegistration(user);
 
         getIngredientsResponse = getIngredientsRequest.getIngredientsList();

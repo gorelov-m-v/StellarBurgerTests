@@ -27,9 +27,9 @@ public class Generator {
         return randomEmail.toLowerCase();
     }
 
-    public String randomName() {
+    public String randomName(int length) {
         String prefix = "test-";
-        return prefix + randomString(20 - prefix.length());
+        return prefix + randomString(length - prefix.length());
     }
 
     public String randomPassword(int length) {

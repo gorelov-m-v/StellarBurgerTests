@@ -48,7 +48,7 @@ public class UserRegistrationTests extends TestHelper {
 
         User requestedUser = new User().withEmail(generate.randomEmail())
                                        .withPassword(generate.randomPassword(passwordLength))
-                                       .withName(generate.randomName());
+                                       .withName(generate.randomName(11));
 
         registrationResponse = registrationRequest.userRegistration(requestedUser);
 
@@ -64,36 +64,47 @@ public class UserRegistrationTests extends TestHelper {
             assertThat(registrationResponse.getMessage()).isEqualTo(messages.getINVALID_PASSWORD_LENGTH());
         }
     }
-//
-//    @DataProvider(name = "nameLength")
-//    public static Object[][] nameLength() {
-//
-//        return new Object[][] {{2,  false},
-//                               {4,  false},
-//                               {5,   true},
-//                               {6,   true},
-//                               {12,  true}};
-//    }
-//
-//    @Test(dataProvider = "nameLength")
-//    public void passwordLengthValidationTest() {
-//
-//        User requestedUser = new User().withEmail(generate.randomEmail())
-//                                       .withPassword(generate.randomPassword(8))
-//                                       .withName(generate.randomName());
-//
-//        registrationResponse = registrationRequest.userRegistration(requestedUser);
-//
-//        assertThat(registrationRequest.statusCode).isEqualTo(200);
-//        assertThat(registrationResponse.success()).isEqualTo(true);
-//        assertThat(registrationResponse.user().email()).isEqualTo(requestedUser.email());
-//        assertThat(registrationResponse.user().name()).isEqualTo(requestedUser.name());
-//        assertThat(registrationResponse.accessToken()).isNotNull();
-//        assertThat(registrationResponse.refreshToken()).isNotNull();
-//    }
+
+    @DataProvider(name = "nameLength")
+    public static Object[][] nameLength() {
+
+        return new Object[][] {{6,   false},
+                               {9,   false},
+                               {10,   true},
+                               {11,   true},
+                               {24,   true},
+                               {39,   true},
+                               {40,   true},
+                               {41,  false},
+                               {80,  false}};
+    }
+
+    @Test(dataProvider = "nameLength")
+    public void nameLengthValidationTest(int nameLength, boolean success) {
+
+        User requestedUser = new User().withEmail(generate.randomEmail())
+                                       .withPassword(generate.randomPassword(11))
+                                       .withName(generate.randomName(nameLength));
+
+        registrationResponse = registrationRequest.userRegistration(requestedUser);
+
+        assertThat(registrationResponse.success()).isEqualTo(success);
+        if(registrationResponse.success() == true) {
+            assertThat(registrationRequest.statusCode).isEqualTo(200);
+            assertThat(registrationResponse.user().email()).isEqualTo(requestedUser.email());
+            assertThat(registrationResponse.user().name()).isEqualTo(requestedUser.name());
+            assertThat(registrationResponse.accessToken()).isNotNull();
+            assertThat(registrationResponse.refreshToken()).isNotNull();
+        } else {
+            assertThat(registrationRequest.statusCode).isEqualTo(404);
+            assertThat(registrationResponse.getMessage()).isEqualTo(messages.getINVALID_NAME_LENGTH());
+        }
+
+
+    }
 
     @AfterMethod
-    public void tearDown(ITestResult result) {
+    public void tearDown() {
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());
         }

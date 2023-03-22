@@ -26,7 +26,7 @@ public class UserGetInfoTest extends TestHelper {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         requestedUser = new User().withEmail(generate.randomEmail())
                                   .withPassword(generate.randomPassword(8))
-                                  .withName(generate.randomName());
+                                  .withName(generate.randomName(11));
 
         registrationResponse = registrationRequest.userRegistration(requestedUser);
     }
