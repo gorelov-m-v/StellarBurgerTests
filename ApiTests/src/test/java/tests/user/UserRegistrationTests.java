@@ -1,10 +1,13 @@
 package tests.user;
 
+import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import model.data.User;
 import model.requests.user.UserDeletionRequest;
 import model.requests.user.UserRegistrationRequest;
 import model.responses.user.registration.RegistrationResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.*;
 import util.Generator;
 import static org.assertj.core.api.Assertions.*;
@@ -13,6 +16,9 @@ public class UserRegistrationTests extends TestHelper {
     UserRegistrationRequest registrationRequest = new UserRegistrationRequest();
     RegistrationResponse registrationResponse;
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
+    Logger logger = LoggerFactory.getLogger(UserRegistrationTests.class);
+    User requestedUser;
+    Gson gson = new Gson();
 
     @BeforeMethod
     public void BeforeMethod(){
@@ -36,7 +42,7 @@ public class UserRegistrationTests extends TestHelper {
     @Test(dataProvider = "passwordLength")
     public void passwordLengthValidationTest(int passwordLength, boolean success) {
 
-        User requestedUser = new User().withEmail(generate.randomEmail(20))
+        requestedUser = new User().withEmail(generate.randomEmail(20))
                                        .withPassword(generate.randomPassword(passwordLength))
                                        .withName(generate.randomName(11));
 
@@ -153,6 +159,9 @@ public class UserRegistrationTests extends TestHelper {
 
     @AfterMethod
     public void tearDown() {
+        logger.info(gson.toJson(requestedUser));
+        logger.info(gson.toJson(registrationResponse));
+
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());
         }
