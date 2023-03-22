@@ -159,8 +159,8 @@ public class UserRegistrationTests extends TestHelper {
 
     @AfterMethod
     public void tearDown() {
-        logger.info(gson.toJson(requestedUser));
-        logger.info(gson.toJson(registrationResponse));
+        logger.info("Request body: " + gson.toJson(requestedUser));
+        logger.info("StatusCode: " + registrationRequest.statusCode + " / Response body: " + gson.toJson(registrationResponse));
 
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());
