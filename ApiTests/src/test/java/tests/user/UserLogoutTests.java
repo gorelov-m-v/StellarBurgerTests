@@ -10,10 +10,10 @@ import model.requests.user.UserRegistrationRequest;
 import model.responses.user.login.LoginResponse;
 import model.responses.user.logout.LogoutResponse;
 import model.responses.user.registration.RegistrationResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.aspectj.lang.annotation.After;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserLogoutTests extends TestHelper {
@@ -28,7 +28,7 @@ public class UserLogoutTests extends TestHelper {
 
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         requestedUser = new User().withEmail(generate.randomEmail())
@@ -49,7 +49,7 @@ public class UserLogoutTests extends TestHelper {
         assertThat(logoutResponse.message()).isEqualTo(messages.getSUCCESSFUL_LOGOUT());
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());

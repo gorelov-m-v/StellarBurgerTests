@@ -6,12 +6,11 @@ import model.requests.user.UserChangeDataRequest;
 import model.requests.user.UserDeletionRequest;
 import model.requests.user.UserRegistrationRequest;
 import model.responses.user.changedata.ChangeDataResponse;
-import model.responses.user.deletion.DeletionResponse;
 import model.responses.user.registration.RegistrationResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserChangeDataTests extends TestHelper {
@@ -24,7 +23,7 @@ public class UserChangeDataTests extends TestHelper {
     User firstUserData;
     User secondUserData;
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         firstUserData = new User().withEmail(generate.randomEmail())
@@ -37,7 +36,7 @@ public class UserChangeDataTests extends TestHelper {
     @Test
     public void smokeUserChangeDataTest() {
         secondUserData = new User().withEmail(generate.randomEmail())
-                                   .withPassword(generate.randomPassword(7))
+                                   .withPassword(generate.randomPassword(8))
                                    .withName(generate.randomName());
 
         changeDataResponse = changeDataRequest.changeUserData(secondUserData, registrationResponse.accessToken());
@@ -48,7 +47,7 @@ public class UserChangeDataTests extends TestHelper {
         assertThat(changeDataResponse.user().name()).isEqualTo(secondUserData.name());
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());

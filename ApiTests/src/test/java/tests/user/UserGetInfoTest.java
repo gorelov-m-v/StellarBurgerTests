@@ -7,10 +7,9 @@ import model.requests.user.UserGetInfoRequest;
 import model.requests.user.UserRegistrationRequest;
 import model.responses.user.getinfo.GetInfoResponse;
 import model.responses.user.registration.RegistrationResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserGetInfoTest extends TestHelper {
@@ -22,7 +21,7 @@ public class UserGetInfoTest extends TestHelper {
     User requestedUser;
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         requestedUser = new User().withEmail(generate.randomEmail())
@@ -42,7 +41,7 @@ public class UserGetInfoTest extends TestHelper {
         assertThat(getInfoResponse.user().name()).isEqualTo(requestedUser.name());
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());

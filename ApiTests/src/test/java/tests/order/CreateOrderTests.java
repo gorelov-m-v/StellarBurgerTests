@@ -11,8 +11,8 @@ import model.responses.order.create.CreateOrderResponse;
 import model.responses.order.getingredients.Data;
 import model.responses.order.getingredients.GetIngredientsResponse;
 import model.responses.user.registration.RegistrationResponse;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import tests.user.TestHelper;
 import util.Generator;
 import java.util.List;
@@ -32,7 +32,7 @@ public class CreateOrderTests extends TestHelper {
     Ingredients orderList;
 
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         user = new User().withEmail(generate.randomEmail())

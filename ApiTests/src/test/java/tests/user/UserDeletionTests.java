@@ -6,10 +6,9 @@ import model.requests.user.UserDeletionRequest;
 import model.requests.user.UserRegistrationRequest;
 import model.responses.user.deletion.DeletionResponse;
 import model.responses.user.registration.RegistrationResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDeletionTests extends TestHelper {
@@ -18,7 +17,7 @@ public class UserDeletionTests extends TestHelper {
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
     DeletionResponse deletionResponse;
     User user;
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         user = new User().withEmail(generate.randomEmail())
@@ -37,7 +36,7 @@ public class UserDeletionTests extends TestHelper {
         assertThat(deletionResponse.message()).isEqualTo(messages.getUSER_SUCCESSFULLY_REMOVED());
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         if(deletionRequest.statusCode != 202) {
             deletionRequest.userDeletion(registrationResponse.accessToken());

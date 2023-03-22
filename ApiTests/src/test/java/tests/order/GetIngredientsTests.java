@@ -1,15 +1,12 @@
 package tests.order;
 
 import io.restassured.RestAssured;
-import model.data.Ingredients;
 import model.navigation.Urls;
 import model.requests.order.GetIngredientsRequest;
-import model.responses.order.getingredients.Data;
 import model.responses.order.getingredients.GetIngredientsResponse;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import tests.user.TestHelper;
-import util.Generator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetIngredientsTests extends TestHelper {
@@ -17,7 +14,7 @@ public class GetIngredientsTests extends TestHelper {
     GetIngredientsRequest getIngredientsRequest = new GetIngredientsRequest();
     Urls urls = new Urls();
 
-    @Before
+    @BeforeMethod
     public void setUp(){
         RestAssured.baseURI = urls.getStellarBurgerProd();
     }

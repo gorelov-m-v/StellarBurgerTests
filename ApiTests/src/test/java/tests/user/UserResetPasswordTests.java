@@ -7,9 +7,9 @@ import model.requests.user.UserResetPasswordRequest;
 import model.requests.user.UserRegistrationRequest;
 import model.responses.user.registration.RegistrationResponse;
 import model.responses.user.resetpassword.ResetPasswordResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserResetPasswordTests extends TestHelper {
@@ -21,7 +21,7 @@ public class UserResetPasswordTests extends TestHelper {
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
     User user;
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         user = new User().withEmail(generate.randomEmail())
@@ -40,7 +40,7 @@ public class UserResetPasswordTests extends TestHelper {
         assertThat(resetPasswordResponse.getMessage()).isEqualTo(messages.getRESET_EMAIL_SENT());
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());

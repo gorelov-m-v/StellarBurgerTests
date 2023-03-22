@@ -7,10 +7,9 @@ import model.requests.user.UserLoginRequest;
 import model.requests.user.UserRegistrationRequest;
 import model.responses.user.login.LoginResponse;
 import model.responses.user.registration.RegistrationResponse;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserLoginTests extends TestHelper {
@@ -21,7 +20,7 @@ public class UserLoginTests extends TestHelper {
     User requestedUser;
     UserDeletionRequest deletionRequest = new UserDeletionRequest();
 
-    @Before
+    @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
         requestedUser = new User().withEmail(generate.randomEmail())
@@ -44,7 +43,7 @@ public class UserLoginTests extends TestHelper {
         assertThat(loginResponse.refreshToken()).isNotNull();
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         if(registrationResponse.accessToken() != null) {
             deletionRequest.userDeletion(registrationResponse.accessToken());
