@@ -31,7 +31,7 @@ public class UserLogoutTests extends TestHelper {
     @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
-        requestedUser = new User().withEmail(generate.randomEmail())
+        requestedUser = new User().withEmail(generate.randomEmail(20))
                                   .withPassword(generate.randomPassword(8))
                                   .withName(generate.randomName(11));
 

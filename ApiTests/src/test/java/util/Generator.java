@@ -21,9 +21,9 @@ public class Generator {
         return new String(string);
     }
 
-    public String randomEmail() {
+    public String randomEmail(int length) {
         String suffix = "@testmail.ru";
-        String randomEmail = randomString(20) + suffix;
+        String randomEmail = randomString(length - suffix.length()) + suffix;
         return randomEmail.toLowerCase();
     }
 

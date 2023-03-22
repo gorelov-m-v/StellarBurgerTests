@@ -24,7 +24,7 @@ public class UserResetPasswordTests extends TestHelper {
     @BeforeMethod
     public void setUp() {
         RestAssured.baseURI = urls.getStellarBurgerProd();
-        user = new User().withEmail(generate.randomEmail())
+        user = new User().withEmail(generate.randomEmail(20))
                 .withPassword(generate.randomPassword(8))
                 .withName(generate.randomName(11));
 

@@ -10,9 +10,13 @@ public class Messages {
     public String getINVALID_PASSWORD_LENGTH() {
         return INVALID_PASSWORD_LENGTH;
     }
-    private final String INVALID_NAME_LENGTH = "Password length must be between 10 and 40 characters";
+    private final String INVALID_NAME_LENGTH = "Name length must be between 10 and 40 characters";
     public String getINVALID_NAME_LENGTH() {
         return INVALID_NAME_LENGTH;
+    }
+    private final String INVALID_EMAIL_LENGTH = "Email must be no longer than 100 characters";
+    public String getINVALID_EMAIL_LENGTH() {
+        return INVALID_EMAIL_LENGTH;
     }
     public String getCREATING_USER_WITHOUT_FIELD() {
         return CREATING_USER_WITHOUT_FIELD;
