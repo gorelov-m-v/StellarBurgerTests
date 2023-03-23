@@ -78,7 +78,7 @@ public class UserRegistrationTests extends TestHelper {
     @Test(dataProvider = "nameLength")
     public void nameLengthValidationTest(int nameLength, boolean success) {
 
-        User requestedUser = new User().withEmail(generate.randomEmail(20))
+        requestedUser = new User().withEmail(generate.randomEmail(20))
                                        .withPassword(generate.randomPassword(11))
                                        .withName(generate.randomName(nameLength));
 
@@ -110,7 +110,7 @@ public class UserRegistrationTests extends TestHelper {
     @Test(dataProvider = "emailLength")
     public void emailLengthValidationTest(int emailLength, boolean success) {
 
-        User requestedUser = new User().withEmail(generate.randomEmail(emailLength))
+        requestedUser = new User().withEmail(generate.randomEmail(emailLength))
                                        .withPassword(generate.randomPassword(11))
                                        .withName(generate.randomName(15));
 
@@ -133,15 +133,25 @@ public class UserRegistrationTests extends TestHelper {
     public static Object[][] requiredField() {
         Generator g = new Generator();
         return new Object[][] {
-                {new User().withEmail(g.randomEmail(20)).withPassword(g.randomPassword(20)).withName(g.randomName(20)), true},
-                {new User().withPassword(g.randomPassword(20)).withName(g.randomName(20)), false},
-                {new User().withEmail(g.randomEmail(20)).withName(g.randomName(20)), false},
-                {new User().withEmail(g.randomEmail(20)).withPassword(g.randomPassword(20)), false}};
+                {new User().withEmail(g.randomEmail(20))
+                           .withPassword(g.randomPassword(20))
+                           .withName(g.randomName(20))
+                           , true},
+                {new User().withPassword(g.randomPassword(20))
+                           .withName(g.randomName(20))
+                           , false},
+                {new User().withEmail(g.randomEmail(20))
+                           .withName(g.randomName(20))
+                           , false},
+                {new User().withEmail(g.randomEmail(20))
+                           .withPassword(g.randomPassword(20))
+                           , false}};
     }
 
     @Test(dataProvider = "requiredField")
     public void requiredFieldValidationTest(User user, boolean success) {
 
+        requestedUser = user;
         registrationResponse = registrationRequest.userRegistration(user);
 
         assertThat(registrationResponse.success()).isEqualTo(success);
@@ -156,6 +166,44 @@ public class UserRegistrationTests extends TestHelper {
             assertThat(registrationResponse.getMessage()).isEqualTo(messages.getCREATING_USER_WITHOUT_FIELD());
         }
     }
+
+    @DataProvider(name = "symbolsUsed")
+    public static Object[][] symbolsUsed() {
+        Generator g = new Generator();
+        return new Object[][] {
+                {new User().withEmail(g.randomEmail(20))
+                           .withPassword(g.randomSpecialString(20))
+                           .withName(g.randomName(20))
+                           , true},
+                {new User().withEmail(g.randomEmail(20))
+                           .withPassword(g.randomCyrillicString(20))
+                           .withName(g.randomName(20))
+                           , true},
+                {new User().withEmail(g.randomEmail(20))
+                           .withPassword(g.randomPassword(20))
+                           .withName(g.randomSpecialString(20))
+                           , true},
+                {new User().withEmail(g.randomEmail(20))
+                           .withPassword(g.randomPassword(20))
+                           .withName(g.randomCyrillicString(20))
+                           , true}};
+    }
+
+    @Test(dataProvider = "symbolsUsed")
+    public void symbolsUsedValidationTest(User user, boolean success) {
+
+        requestedUser = user;
+        registrationResponse = registrationRequest.userRegistration(user);
+
+        assertThat(registrationResponse.success()).isEqualTo(success);
+        assertThat(registrationRequest.statusCode).isEqualTo(200);
+        assertThat(registrationResponse.user().email()).isEqualTo(user.email());
+        assertThat(registrationResponse.user().name()).isEqualTo(user.name());
+        assertThat(registrationResponse.accessToken()).isNotNull();
+        assertThat(registrationResponse.refreshToken()).isNotNull();
+    }
+
+
 
     @AfterMethod
     public void tearDown() {

@@ -9,11 +9,29 @@ public class Generator {
     private final String LOWER = "abcdefghijklmnopqrstuvwxyz";
     private final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final String DIGITS = "0123456789";
+    private String SPECIAL = "(~!@#$%^&*_-+=`|\\(){}[]:;\"'<>,.?/";
+    private String CYRILLIC = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя";
 
     Random random = new Random();
 
     public String randomString(int length) {
         String combination = LOWER + DIGITS + UPPER;
+        char[] string = new char[length];
+        for(int i = 0; i < length; i++) {
+            string[i] = combination.charAt(random.nextInt(combination.length()));
+        }
+        return new String(string);
+    }
+    public String randomSpecialString(int length) {
+        String combination = SPECIAL;
+        char[] string = new char[length];
+        for(int i = 0; i < length; i++) {
+            string[i] = combination.charAt(random.nextInt(combination.length()));
+        }
+        return new String(string);
+    }
+    public String randomCyrillicString(int length) {
+        String combination = SPECIAL;
         char[] string = new char[length];
         for(int i = 0; i < length; i++) {
             string[i] = combination.charAt(random.nextInt(combination.length()));
