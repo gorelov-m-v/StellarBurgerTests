@@ -24,7 +24,7 @@ public class LoginResponse {
         this.user = user;
     }
 
-    public String getMessage() {
+    public String message() {
         return message;
     }
 

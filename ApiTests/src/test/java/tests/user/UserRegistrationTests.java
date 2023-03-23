@@ -203,8 +203,6 @@ public class UserRegistrationTests extends TestHelper {
         assertThat(registrationResponse.refreshToken()).isNotNull();
     }
 
-
-
     @AfterMethod
     public void tearDown() {
         logger.info("Request body: " + gson.toJson(requestedUser));
