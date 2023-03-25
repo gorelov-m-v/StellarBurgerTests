@@ -86,6 +86,14 @@ public class UserLoginTests extends TestHelper {
         assertThat(loginResponse.success()).isEqualTo(false);
         assertThat(loginResponse.message()).isEqualTo(messages.getEMAIL_PASSWORD_INCORRECT());
     }
+    @Test
+    public void loginWithoutEmailT2est() {
+        loginResponse = loginRequest.userLogin(new User().withPassword(requestedUser.password()));
+
+        assertThat(loginRequest.statusCode).isEqualTo(401);
+        assertThat(loginResponse.success()).isEqualTo(false);
+        assertThat(loginResponse.message()).isEqualTo(messages.getEMAIL_PASSWORD_INCORRECT());
+    }
 
     @AfterMethod
     public void tearDown() {
